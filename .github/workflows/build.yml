@@ -3,11 +3,10 @@ name: Build Widgetsmith IPA
 on:
   push:
     branches:
-      - main
-  pull_request:
+      - simple
+  workflow_dispatch:
     branches:
-      - main
-  workflow_dispatch: {}
+      - simple
 
 permissions:
   contents: read
