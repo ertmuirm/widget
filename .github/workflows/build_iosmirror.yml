@@ -30,18 +30,30 @@ jobs:
       - name: Build (unsigned)
         run: |
           cd new
-          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
+          xcodebuild archive -scheme IOSMirror -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
 
       - name: Package as IPA
         run: |
-          mkdir -p Payload
-          cp -r ./new/build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/ 2>/dev/null || cp -r ./new/build/IOSMirror.xarchive/Products/Applications/Widget.app Payload/IOSMirror.app
-          chmod +x Payload/IOSMirror.app/IOSMirror 2>/dev/null || chmod +x Payload/IOSMirror.app/Widget
-          cd Payload
-          zip -r ../IOSMirror.ipa IOSMirror.app
-          cd ..
-          ls -la IOSMirror.ipa
-          echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
+          cd new
+          # Find the app bundle
+          APP=$(find build -name "*.app" -type d 2>/dev/null | head -1)
+          echo "Found: $APP"
+          
+          if [ -n "$APP" ] && [ -d "$APP" ]; then
+            mkdir -p ../Payload
+            cp -R "$APP" ../Payload/
+            cd ../Payload
+            APP_NAME=$(basename "$APP")
+            chmod +x "$APP_NAME"/* 2>/dev/null || true
+            zip -r ../IOSMirror.ipa "$APP_NAME"
+            cd ..
+            ls -la IOSMirror.ipa
+            echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
+          else
+            echo "App not found"
+            ls -la build/
+            exit 1
+          fi
 
       - name: Upload unsigned IPA
         uses: actions/upload-artifact@v4
