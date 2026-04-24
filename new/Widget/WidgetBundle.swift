@@ -64,7 +64,7 @@ struct WidgetTimelineProvider: TimelineProvider {
         let config = Storage.shared.loadConfiguration()
         
         // Find the appropriate widget for this family
-        let family: WidgetFamily
+        let family: AppWidgetFamily
         switch context.family {
         case .systemSmall:
             family = .homeSmall
@@ -128,7 +128,7 @@ struct HomeWidgetEntryView: View {
 
 struct HomeWidgetGrid: View {
     let widget: WidgetItem
-    let family: WidgetFamily
+    let family: AppWidgetFamily
     
     var body: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: widget.family.gridColumns)
@@ -170,7 +170,7 @@ struct HomeIconView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 6)
-                .fill(icon.backgroundColor.hexColor?.opacity(icon.opacity) ?? Color.black.opacity(icon.opacity))
+                .fill(icon.backgroundColor.hexSwiftUIColor?.opacity(icon.opacity) ?? Color.black.opacity(icon.opacity))
             
             switch icon.displayType {
             case .icon:

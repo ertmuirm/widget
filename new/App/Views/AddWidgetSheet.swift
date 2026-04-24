@@ -4,7 +4,7 @@ struct AddWidgetSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedCategory = 0
     
-    let onAdd: (WidgetFamily) -> Void
+    let onAdd: (AppWidgetFamily) -> Void
     
     var body: some View {
         NavigationStack {
@@ -79,7 +79,7 @@ struct AddWidgetSheet: View {
         }
     }
     
-    private func widgetOption(_ family: WidgetFamily, icon: String, title: String, subtitle: String, preview: String) -> some View {
+    private func widgetOption(_ family: AppWidgetFamily, icon: String, title: String, subtitle: String, preview: String) -> some View {
         Button {
             onAdd(family)
             dismiss()

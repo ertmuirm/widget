@@ -34,7 +34,7 @@ final class AppState: ObservableObject {
         storage.savePreferences(preferences)
     }
     
-    func addWidget(_ family: WidgetFamily) {
+    func addWidget(_ family: AppWidgetFamily) {
         let grid = IconGrid(columns: family.gridColumns, rows: family.gridRows)
         var widget = WidgetItem(family: family, iconGrid: grid)
         

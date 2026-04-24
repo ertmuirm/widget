@@ -1,4 +1,6 @@
 import Foundation
+import UIKit
+import SwiftUI
 
 // MARK: - Widget Configuration Models
 
@@ -15,14 +17,14 @@ struct WidgetConfiguration: Codable, Identifiable {
 /// Individual widget item
 struct WidgetItem: Codable, Identifiable {
     var id: UUID = UUID()
-    var family: WidgetFamily
+    var family: AppWidgetFamily
     var iconGrid: IconGrid
     var createdAt: Date = Date()
     var modifiedAt: Date = Date()
 }
 
 /// Widget families supported by the app
-enum WidgetFamily: String, Codable, CaseIterable {
+enum AppWidgetFamily: String, Codable, CaseIterable {
     // Home Screen Widgets
     case homeSmall = "homeSmall"          // 1x1 (1 icon)
     case homeMedium = "homeMedium"        // 3x3 (9 icons)
@@ -301,6 +303,9 @@ extension String {
         
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
+    
+    var hexSwiftUIColor: Color? {
+        guard let uiColor = hexColor else { return nil }
+        return Color(uiColor)
+    }
 }
-
-import UIKit
