@@ -35,25 +35,27 @@ jobs:
       - name: Package as IPA
         run: |
           cd new
-          # Find the app bundle
-          APP=$(find build -name "*.app" -type d 2>/dev/null | head -1)
-          echo "Found: $APP"
-          
-          if [ -n "$APP" ] && [ -d "$APP" ]; then
-            mkdir -p ../Payload
-            cp -R "$APP" ../Payload/
-            cd ../Payload
-            APP_NAME=$(basename "$APP")
-            chmod +x "$APP_NAME"/* 2>/dev/null || true
-            zip -r ../IOSMirror.ipa "$APP_NAME"
-            cd ..
-            ls -la IOSMirror.ipa
-            echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
+          # Find the app bundle in the archive
+          if [ -d "build/IOSMirror.xarchive/Products/Applications/IOSMirror.app" ]; then
+            APP="build/IOSMirror.xarchive/Products/Applications/IOSMirror.app"
+          elif [ -d "build/IOSMirror.xarchive/Products/Applications/Widget.app" ]; then
+            APP="build/IOSMirror.xarchive/Products/Applications/Widget.app"
           else
             echo "App not found"
-            ls -la build/
+            find build -name "*.app" 2>/dev/null
             exit 1
           fi
+          
+          echo "Using: $APP"
+          mkdir -p ../Payload
+          cp -R "$APP" ../Payload/
+          cd ../Payload
+          APP_NAME=$(basename "$APP")
+          chmod +x "$APP_NAME"/* 2>/dev/null || true
+          zip -r ../IOSMirror.ipa "$APP_NAME"
+          cd ..
+          ls -la IOSMirror.ipa
+          echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
 
       - name: Upload unsigned IPA
         uses: actions/upload-artifact@v4
