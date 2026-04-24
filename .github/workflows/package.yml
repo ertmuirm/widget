@@ -9,34 +9,64 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: List files
+      - name: Read version from Info.plist
+        id: version
         run: |
-          echo "Current directory:"
-          pwd
-          ls -la
-          echo ""
-          echo "Widgetsmith.app contents:"
-          ls -la Widgetsmith.app/ 2>/dev/null || echo "No Widgetsmith.app"
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
+          BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Info.plist)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "BUILD=$BUILD" >> $GITHUB_OUTPUT
+          echo "Building Widgetsmith v${VERSION} (${BUILD})"
 
-      - name: Package App
+      - name: Clean previous build artifacts
+        run: |
+          rm -rf Payload/
+          rm -f *.ipa
+          rm -f *.zip
+
+      - name: Remove code signatures for Sidestore
+        run: |
+          rm -rf _CodeSignature
+          rm -rf "PlugIns/Widget Configurator.strings" 2>/dev/null || true
+          rm -rf "PlugIns/Clock.strings" 2>/dev/null || true
+          find . -name "*.strings" -path "*/PlugIns/*" -delete 2>/dev/null || true
+          echo "Code signatures removed"
+
+      - name: Package as IPA structure
         run: |
           mkdir -p Payload/Widgetsmith.app
-          # Copy all files/folders except .git, .github, Payload
-          for item in * .[!.]*; do
+          # Copy all app contents (files are in root of repo)
+          for item in *; do
             case "$item" in
-              .git|.github|Payload|'.gitignore') ;;
+              .git|.github|Payload|'.trigger'|'.force_push_trigger') ;;
+              *) cp -R "$item" Payload/Widgetsmith.app/ ;;
+            esac
+          done
+          # Copy hidden files (except .git)
+          for item in .[!.]*; do
+            case "$item" in
+              .git) ;;
               *) cp -R "$item" Payload/Widgetsmith.app/ 2>/dev/null || true ;;
             esac
           done
+          chmod +x Payload/Widgetsmith.app/WidgetSmith 2>/dev/null || true
           ls -la Payload/
-          echo "Total files in Payload: $(find Payload/Widgetsmith.app -type f | wc -l)"
-          echo "Total size: $(du -sh Payload/Widgetsmith.app | cut -f1)"
+          echo "Total files in app bundle: $(find Payload/Widgetsmith.app -type f | wc -l)"
+
+      - name: Read version for naming
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
+          BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Info.plist)
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          echo "BUILD=${BUILD}" >> $GITHUB_OUTPUT
+          echo "Building version: ${VERSION} build ${BUILD}"
 
       - name: Create ZIP archive
         run: |
@@ -51,4 +81,4 @@ jobs:
         with:
           name: Widgetsmith-Package
           path: Widgetsmith.zip
-          retention-days: 7
+          retention-days: 30
