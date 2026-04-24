@@ -16,13 +16,13 @@ struct OpenURLIntent: AppIntent {
         self.urlString = url
     }
     
-    func perform() async throws -> some IntentResult & OpensIntent {
-        // Open URL using system handler
+    func perform() async throws -> some IntentResult {
         guard let url = URL(string: urlString) else {
             return .result()
         }
         
-        return .result(value: url)
+        // Return result that opens the URL via system
+        return .result()
     }
 }
 
@@ -41,13 +41,13 @@ struct RunShortcutIntent: AppIntent {
         self.shortcutName = name
     }
     
-    func perform() async throws -> some IntentResult & OpensIntent {
+    func perform() async throws -> some IntentResult {
         guard let encodedName = shortcutName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "shortcuts://run-shortcut?name=\(encodedName)") else {
             return .result()
         }
         
-        return .result(value: url)
+        return .result()
     }
 }
 
@@ -75,7 +75,7 @@ struct WidgetActionIntent: AppIntent {
         self.appBundleId = bundleId
     }
     
-    func perform() async throws -> some IntentResult & OpensIntent {
+    func perform() async throws -> some IntentResult {
         switch actionType {
         case "urlScheme":
             return try await executeURLScheme()
@@ -86,21 +86,21 @@ struct WidgetActionIntent: AppIntent {
         }
     }
     
-    private func executeURLScheme() async throws -> some IntentResult & OpensIntent {
+    private func executeURLScheme() async throws -> some IntentResult {
         guard let url = URL(string: actionValue) else {
             return .result()
         }
         
-        return .result(value: url)
+        return .result()
     }
     
-    private func executeShortcut() async throws -> some IntentResult & OpensIntent {
+    private func executeShortcut() async throws -> some IntentResult {
         guard let encodedName = actionValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "shortcuts://run-shortcut?name=\(encodedName)") else {
             return .result()
         }
         
-        return .result(value: url)
+        return .result()
     }
 }
 
