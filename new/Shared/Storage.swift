@@ -19,7 +19,7 @@ final class Storage {
     }
     
     /// Save widget configuration to App Group
-    func saveConfiguration(_ config: WidgetConfiguration) {
+    func saveConfiguration(_ config: AppConfig) {
         guard let userDefaults = userDefaults else {
             print("Storage: Failed to access App Group UserDefaults")
             return
@@ -42,7 +42,7 @@ final class Storage {
     }
     
     /// Load widget configuration from App Group
-    func loadConfiguration() -> WidgetConfiguration? {
+    func loadConfiguration() -> AppConfig? {
         guard let userDefaults = userDefaults,
               let data = userDefaults.data(forKey: StorageKeys.widgetConfiguration) else {
             return nil
@@ -51,7 +51,7 @@ final class Storage {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            return try decoder.decode(WidgetConfiguration.self, from: data)
+            return try decoder.decode(AppConfig.self, from: data)
         } catch {
             print("Storage: Failed to decode configuration: \(error)")
             return nil
@@ -87,7 +87,7 @@ final class Storage {
     }
     
     /// Save backup to iCloud
-    func backupToiCloud(_ config: WidgetConfiguration) throws -> URL {
+    func backupToiCloud(_ config: AppConfig) throws -> URL {
         guard let containerURL = iCloudContainerURL else {
             throw StorageError.iCloudNotAvailable
         }
@@ -134,18 +134,18 @@ final class Storage {
     }
     
     /// Restore from iCloud backup
-    func restoreFromiCloud(at url: URL) throws -> WidgetConfiguration {
+    func restoreFromiCloud(at url: URL) throws -> AppConfig {
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
         let backup = try decoder.decode(WidgetBackup.self, from: data)
         
-        guard backup.version == WidgetConfiguration.currentVersion else {
+        guard backup.version == AppConfig.currentVersion else {
             throw StorageError.incompatibleVersion
         }
         
-        var config = WidgetConfiguration()
+        var config = AppConfig()
         config.widgets = backup.widgets
         config.lastModified = Date()
         
@@ -156,7 +156,7 @@ final class Storage {
     // MARK: - Files App Backup
     
     /// Save backup to Files app (user-selected location via document picker)
-    func saveToFiles(_ config: WidgetConfiguration, to url: URL) throws {
+    func saveToFiles(_ config: AppConfig, to url: URL) throws {
         let backup = WidgetBackup.create(from: config)
         
         let encoder = JSONEncoder()
@@ -170,18 +170,18 @@ final class Storage {
     }
     
     /// Load from Files backup
-    func loadFromFiles(at url: URL) throws -> WidgetConfiguration {
+    func loadFromFiles(at url: URL) throws -> AppConfig {
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
         let backup = try decoder.decode(WidgetBackup.self, from: data)
         
-        guard backup.version == WidgetConfiguration.currentVersion else {
+        guard backup.version == AppConfig.currentVersion else {
             throw StorageError.incompatibleVersion
         }
         
-        var config = WidgetConfiguration()
+        var config = AppConfig()
         config.widgets = backup.widgets
         config.lastModified = Date()
         
@@ -191,7 +191,7 @@ final class Storage {
     // MARK: - Export/Import Helpers
     
     /// Generate backup JSON string for sharing
-    func exportToJSON(_ config: WidgetConfiguration) throws -> String {
+    func exportToJSON(_ config: AppConfig) throws -> String {
         let backup = WidgetBackup.create(from: config)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -202,7 +202,7 @@ final class Storage {
     }
     
     /// Import from JSON string
-    func importFromJSON(_ json: String) throws -> WidgetConfiguration {
+    func importFromJSON(_ json: String) throws -> AppConfig {
         guard let data = json.data(using: .utf8) else {
             throw StorageError.invalidData
         }
@@ -212,11 +212,11 @@ final class Storage {
         
         let backup = try decoder.decode(WidgetBackup.self, from: data)
         
-        guard backup.version == WidgetConfiguration.currentVersion else {
+        guard backup.version == AppConfig.currentVersion else {
             throw StorageError.incompatibleVersion
         }
         
-        var config = WidgetConfiguration()
+        var config = AppConfig()
         config.widgets = backup.widgets
         config.lastModified = Date()
         

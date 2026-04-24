@@ -168,7 +168,7 @@ struct RestoreSheet: View {
     @State private var iCloudBackups: [URL] = []
     @State private var errorMessage: String?
     
-    let onRestore: (WidgetConfiguration) -> Void
+    let onRestore: (AppConfig) -> Void
     
     var body: some View {
         NavigationStack {

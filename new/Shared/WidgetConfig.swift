@@ -5,7 +5,7 @@ import SwiftUI
 // MARK: - Widget Configuration Models
 
 /// Represents the overall configuration for all widgets
-struct WidgetConfiguration: Codable, Identifiable {
+struct AppConfig: Codable, Identifiable {
     var id: UUID = UUID()
     var widgets: [WidgetItem] = []
     var lastModified: Date = Date()
@@ -231,10 +231,10 @@ struct WidgetBackup: Codable {
     var exportedAt: Date
     var widgets: [WidgetItem]
     
-    static func create(from config: WidgetConfiguration) -> WidgetBackup {
+    static func create(from config: AppConfig) -> WidgetBackup {
         WidgetBackup(
-            version: WidgetConfiguration.currentVersion,
-            appName: "Widget",
+            version: AppConfig.currentVersion,
+            appName: "IOSMirror",
             exportedAt: Date(),
             widgets: config.widgets
         )

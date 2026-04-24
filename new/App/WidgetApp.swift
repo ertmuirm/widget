@@ -16,13 +16,13 @@ struct WidgetApp: App {
 
 /// Main application state
 final class AppState: ObservableObject {
-    @Published var configuration: WidgetConfiguration
+    @Published var configuration: AppConfig
     @Published var preferences: UserPreferences
     
     private let storage = Storage.shared
     
     init() {
-        self.configuration = storage.loadConfiguration() ?? WidgetConfiguration()
+        self.configuration = storage.loadConfiguration() ?? AppConfig()
         self.preferences = storage.loadPreferences()
     }
     
