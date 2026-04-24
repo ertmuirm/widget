@@ -14,10 +14,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          sparse-checkout: |
-            Widgetsmith.app
-            Info.plist
-          sparse-checkout-cone-mode: false
 
       - name: List files
         run: |
@@ -31,12 +27,16 @@ jobs:
       - name: Package App
         run: |
           mkdir -p Payload/Widgetsmith.app
-          # Copy all app contents (files are in root, not Widgetsmith.app folder)
-          cp -R * Payload/Widgetsmith.app/ 2>/dev/null || true
-          cp -R .[!.]* Payload/Widgetsmith.app/ 2>/dev/null || true
+          # Copy all files/folders except .git, .github, Payload
+          for item in * .[!.]*; do
+            case "$item" in
+              .git|.github|Payload|'.gitignore') ;;
+              *) cp -R "$item" Payload/Widgetsmith.app/ 2>/dev/null || true ;;
+            esac
+          done
           ls -la Payload/
-          ls -la Payload/Widgetsmith.app/ | head -20
-          echo "Total files in Payload: $(ls Payload/Widgetsmith.app/ | wc -l)"
+          echo "Total files in Payload: $(find Payload/Widgetsmith.app -type f | wc -l)"
+          echo "Total size: $(du -sh Payload/Widgetsmith.app | cut -f1)"
 
       - name: Create ZIP archive
         run: |
