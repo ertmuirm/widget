@@ -17,11 +17,6 @@ jobs:
           ref: new
           fetch-depth: 1
 
-      - name: Set up node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Install xcodegen
         run: |
           which xcodegen || brew install xcodegen
@@ -31,19 +26,20 @@ jobs:
         run: |
           cd new
           xcodegen generate
-          ls -la
 
       - name: Build (unsigned)
         run: |
           cd new
-          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO 2>&1 | tail -30
+          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
 
       - name: Package as IPA
         run: |
           mkdir -p Payload
-          cp -r ./new/build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/ || cp -r ./new/build/IOSMirror.xarchive/Products/Applications/Widget.app Payload/IOSMirror.app
+          cp -r ./new/build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/ 2>/dev/null || cp -r ./new/build/IOSMirror.xarchive/Products/Applications/Widget.app Payload/IOSMirror.app
           chmod +x Payload/IOSMirror.app/IOSMirror 2>/dev/null || chmod +x Payload/IOSMirror.app/Widget
-          zip -r IOSMirror.ipa Payload
+          cd Payload
+          zip -r ../IOSMirror.ipa IOSMirror.app
+          cd ..
           ls -la IOSMirror.ipa
           echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
 
