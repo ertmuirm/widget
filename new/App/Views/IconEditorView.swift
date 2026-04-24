@@ -90,7 +90,7 @@ struct IconEditorView: View {
         VStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(icon.backgroundColor.hexColor?.opacity(icon.opacity) ?? Color.black.opacity(icon.opacity))
+                    .fill(icon.backgroundColor.hexSwiftUIColor?.opacity(Double(icon.opacity)) ?? Color.black.opacity(Double(icon.opacity)))
                 
                 iconPreviewContent
             }
@@ -306,11 +306,11 @@ struct IconEditorView: View {
             
             // Action Type Selector
             VStack(spacing: 0) {
-                actionTypeRow(.appIntent, icon: "bolt.fill", label: "App Intent", description: "Execute directly - no app opens")
+                actionTypeRow(.appIntent, action: icon.action, iconName: "bolt.fill", label: "App Intent", description: "Execute directly - no app opens")
                 Divider().background(Color.gray.opacity(0.3))
-                actionTypeRow(.shortcut, icon: "arrow.triangle.branch", label: "Shortcuts", description: "Run a Shortcuts workflow")
+                actionTypeRow(.shortcut, action: icon.action, iconName: "arrow.triangle.branch", label: "Shortcuts", description: "Run a Shortcuts workflow")
                 Divider().background(Color.gray.opacity(0.3))
-                actionTypeRow(.urlScheme, icon: "link", label: "URL Scheme", description: "Open via URL scheme")
+                actionTypeRow(.urlScheme, action: icon.action, iconName: "link", label: "URL Scheme", description: "Open via URL scheme")
             }
             .background(Color.white.opacity(0.05))
             .cornerRadius(12)
@@ -320,14 +320,14 @@ struct IconEditorView: View {
         }
     }
     
-    private func actionTypeRow(_ type: ActionType, icon: String, label: String, description: String) -> some View {
+    private func actionTypeRow(_ type: ActionType, icon action: IconAction, iconName: String, label: String, description: String) -> some View {
         Button {
-            icon.action.type = type
+            action.type = type
         } label: {
             HStack {
-                Image(systemName: icon)
+                Image(systemName: iconName)
                     .frame(width: 24)
-                    .foregroundColor(icon.action.type == type ? .white : .gray)
+                    .foregroundColor(action.type == type ? .white : .gray)
                 
                 VStack(alignment: .leading) {
                     Text(label)
@@ -339,7 +339,7 @@ struct IconEditorView: View {
                 
                 Spacer()
                 
-                if icon.action.type == type {
+                if action.type == type {
                     Image(systemName: "checkmark")
                         .foregroundColor(.white)
                 }

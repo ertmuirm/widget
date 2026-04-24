@@ -112,7 +112,7 @@ struct WidgetEditorView: View {
     private func iconCell(icon: IconItem) -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8)
-                .fill(icon.backgroundColor.hexColor?.opacity(icon.opacity) ?? Color.black.opacity(icon.opacity))
+                .fill(icon.backgroundColor.hexSwiftUIColor?.opacity(Double(icon.opacity)) ?? Color.black.opacity(Double(icon.opacity)))
             
             switch icon.displayType {
             case .icon:

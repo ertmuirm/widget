@@ -229,10 +229,10 @@ struct IconView: View {
     
     var body: some View {
         ZStack {
-            if let color = icon.backgroundColor.hexColor {
-                color.opacity(icon.opacity)
+            if let color = icon.backgroundColor.hexSwiftUIColor {
+                color.opacity(Double(icon.opacity))
             } else {
-                Color.black.opacity(icon.opacity)
+                Color.black.opacity(Double(icon.opacity))
             }
             
             switch icon.displayType {
