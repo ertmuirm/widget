@@ -154,11 +154,11 @@ struct HomeWidgetGrid: View {
     
     private var iconSize: CGFloat {
         switch family {
-        case .systemSmall: return 24
-        case .systemMedium: return 28
-        case .systemLarge: return 22
-        case .systemExtraLarge: return 20
-        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+        case .homeSmall: return 24
+        case .homeMedium: return 28
+        case .homeLarge: return 22
+        case .homeExtraLarge: return 20
+        case .lockCircular, .lockRectangular, .lockInline:
             return 28
         @unknown default: return 28
         }
