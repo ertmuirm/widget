@@ -31,8 +31,24 @@ jobs:
       - name: Package App
         run: |
           mkdir -p Payload/Widgetsmith.app
-          if [ -d "Widgetsmith.app" ]; then
-            cp -R Widgetsmith.app/* Payload/Widgetsmith.app/
-          fi
+          # Copy all app contents (files are in root, not Widgetsmith.app folder)
+          cp -R * Payload/Widgetsmith.app/ 2>/dev/null || true
+          cp -R .[!.]* Payload/Widgetsmith.app/ 2>/dev/null || true
           ls -la Payload/
-          ls -la Payload/Widgetsmith.app/
+          ls -la Payload/Widgetsmith.app/ | head -20
+          echo "Total files in Payload: $(ls Payload/Widgetsmith.app/ | wc -l)"
+
+      - name: Create ZIP archive
+        run: |
+          cd Payload
+          zip -r ../Widgetsmith.zip Widgetsmith.app
+          cd ..
+          ls -la Widgetsmith.zip
+          echo "ZIP size: $(du -h Widgetsmith.zip | cut -f1)"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Widgetsmith-Package
+          path: Widgetsmith.zip
+          retention-days: 7
