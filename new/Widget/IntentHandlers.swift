@@ -113,19 +113,4 @@ struct QuickActionShortcuts {
     }
 }
 
-// MARK: - App Shortcuts for Siri
-
-/// App Shortcuts exposed to Siri
-struct WidgetAppShortcuts: AppShortcutsProvider {
-    static var appShortcuts: [AppShortcut] {
-        AppShortcut(
-            intent: OpenURLIntent(),
-            phrases: [
-                "Open \(.applicationName)",
-                "Configure \(.applicationName)"
-            ],
-            shortTitle: "Widget",
-            systemImageName: "app.fill"
-        )
-    }
-}
+// MARK: - End of Intent Handlers
