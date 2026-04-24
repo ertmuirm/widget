@@ -42,7 +42,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            PRODUCT_BUNDLE_IDENTIFIER=com.zeroflash.widget \
+            PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror \
             build 2>&1 | tail -30
       
       - name: Package if successful

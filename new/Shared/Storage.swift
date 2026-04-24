@@ -7,7 +7,7 @@ final class Storage {
     
     static let shared = Storage()
     
-    private let appGroupIdentifier = "group.com.zeroflash.widget"
+    private let appGroupIdentifier = "group.com.iosmirror"
     private let fileManager = FileManager.default
     
     private init() {}
