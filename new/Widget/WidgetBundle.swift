@@ -103,7 +103,7 @@ struct HomeWidgetEntryView: View {
     
     var body: some View {
         if let widget = entry.widget {
-            HomeWidgetGrid(widget: widget, family: family)
+            HomeWidgetGrid(widget: widget, family: family.toAppWidgetFamily())
         } else {
             placeholderView
         }
@@ -158,7 +158,7 @@ struct HomeWidgetGrid: View {
         case .systemMedium: return 28
         case .systemLarge: return 22
         case .systemExtraLarge: return 20
-        default: return 28
+        @unknown default: return 28
         }
     }
 }
@@ -207,7 +207,7 @@ struct LockScreenWidgetEntryView: View {
             rectangularView
         case .accessoryInline:
             inlineView
-        default:
+        @unknown default:
             circularView
         }
     }

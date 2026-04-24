@@ -309,3 +309,22 @@ extension String {
         return Color(uiColor)
     }
 }
+
+// MARK: - WidgetKit Family Conversion
+
+import WidgetKit
+
+extension WidgetFamily {
+    func toAppWidgetFamily() -> AppWidgetFamily {
+        switch self {
+        case .systemSmall: return .homeSmall
+        case .systemMedium: return .homeMedium
+        case .systemLarge: return .homeLarge
+        case .systemExtraLarge: return .homeExtraLarge
+        case .accessoryCircular: return .lockCircular
+        case .accessoryRectangular: return .lockRectangular
+        case .accessoryInline: return .lockInline
+        default: return .homeMedium
+        }
+    }
+}
