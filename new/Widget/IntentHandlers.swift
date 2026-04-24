@@ -76,30 +76,6 @@ struct WidgetActionIntent: AppIntent {
     }
     
     func perform() async throws -> some IntentResult {
-        switch actionType {
-        case "urlScheme":
-            return try await executeURLScheme()
-        case "shortcut":
-            return try await executeShortcut()
-        default:
-            return .result()
-        }
-    }
-    
-    private func executeURLScheme() async throws -> some IntentResult {
-        guard let url = URL(string: actionValue) else {
-            return .result()
-        }
-        
-        return .result()
-    }
-    
-    private func executeShortcut() async throws -> some IntentResult {
-        guard let encodedName = actionValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "shortcuts://run-shortcut?name=\(encodedName)") else {
-            return .result()
-        }
-        
         return .result()
     }
 }
