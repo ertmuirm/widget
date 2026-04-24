@@ -30,7 +30,7 @@ jobs:
       - name: Build (unsigned)
         run: |
           cd new
-          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/Widget.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror PRODUCT_NAME=IOSMirror 2>&1 | tail -30
+          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/Widget.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
 
       - name: Package as IPA
         run: |
