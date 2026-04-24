@@ -1,0 +1,24 @@
+name: Build and Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - simple
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Setup
+        run: |
+          echo "Starting build..."
+          whoami
+          pwd
+          ls -la
+
+      - name: Package App
+        run: |
+          mkdir -p Payload/Widgetsmith.app
+          cp -R Info.plist Payload/Widgetsmith.app/
+          ls -la Payload/
