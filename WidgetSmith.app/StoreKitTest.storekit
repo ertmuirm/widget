@@ -1,0 +1,291 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "DD488DBD",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1523682319",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_compatibilityTimeRate" : {
+      "3" : 6
+    },
+    "_developerTeamID" : "26NR694A3R",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 785437026.81215096,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ],
+    "_timeRate" : 1002
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20681969",
+      "localizations" : [
+
+      ],
+      "name" : "Widgetsmith Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+            {
+              "eligibility" : [
+                "new",
+                "expired",
+                "existing"
+              ],
+              "internalID" : "552D030E",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "WS Partners",
+              "subscriptionPeriod" : "P1Y"
+            }
+          ],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "1531086176",
+          "introductoryOffer" : {
+            "internalID" : "0846B2A8",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PremiumAnnualWidget",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Active: Annual Premium $19.99 w/ Trial",
+          "subscriptionGroupID" : "20681969",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+            {
+              "eligibility" : [
+                "existing",
+                "expired",
+                "new"
+              ],
+              "internalID" : "710F1493",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Austin Evans",
+              "subscriptionPeriod" : "P1M"
+            },
+            {
+              "eligibility" : [
+                "expired",
+                "new"
+              ],
+              "internalID" : "4C72DF34",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Austin Evans (iOS 26)",
+              "subscriptionPeriod" : "P1M"
+            },
+            {
+              "eligibility" : [
+                "expired",
+                "new"
+              ],
+              "internalID" : "314FBBBF",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "Denki (iOS 26)",
+              "subscriptionPeriod" : "P1M"
+            },
+            {
+              "eligibility" : [
+                "expired",
+                "new"
+              ],
+              "internalID" : "6685EDED",
+              "isStackable" : false,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "MacStories (iOS 26 Review)",
+              "subscriptionPeriod" : "P1M"
+            }
+          ],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 4,
+          "internalID" : "1531086933",
+          "introductoryOffer" : {
+            "internalID" : "DE6A6FD6",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PremiumMonthlyWidgetsmith",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Active: Monthly Premium $1.99 w/ Trial",
+          "subscriptionGroupID" : "20681969",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6746048885",
+          "introductoryOffer" : {
+            "internalID" : "6DFF4833",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium (Annual)",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PremiumAnnualWidgetsmith2999",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Premium Annual $29.99 with 1 Week Trial",
+          "subscriptionGroupID" : "20681969",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6746048293",
+          "introductoryOffer" : {
+            "internalID" : "0AFECFA8",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium (Monthly)",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Access to Hosted Data Sources",
+              "displayName" : "Widgetsmith Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "PremiumMonthlyWidgetsmith399",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Premium Monthly $3.99 with 1 Week Trial",
+          "subscriptionGroupID" : "20681969",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
