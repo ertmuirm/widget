@@ -1,0 +1,137 @@
+name: Build Widgetsmith IPA
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  APP_NAME: Widgetsmith
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version from Info.plist
+        id: version
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
+          BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Info.plist)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "BUILD=$BUILD" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION, BUILD=$BUILD"
+
+      - name: Clean previous build artifacts
+        run: |
+          rm -rf Payload/
+          rm -f *.ipa
+          rm -f *.zip
+
+      - name: Remove code signatures for Sidestore
+        run: |
+          rm -rf _CodeSignature
+          rm -rf "PlugIns/Widget Config Intent.appex/_CodeSignature"
+          rm -rf "PlugIns/Widget Config Intent.appex/SC_Info"
+          rm -rf "PlugIns/WidgetsExtension.appex/_CodeSignature"
+          rm -rf "PlugIns/WidgetsExtension.appex/SC_Info"
+          rm -rf "Frameworks/UserMessagingPlatform.framework/_CodeSignature"
+          rm -rf "Frameworks/UserMessagingPlatform.framework/SC_Info"
+          find . -name "_CodeSignature" -type d -exec rm -rf {} + 2>/dev/null || true
+          find . -name "SC_Info" -type d -exec rm -rf {} + 2>/dev/null || true
+          echo "Code signatures stripped"
+
+      - name: Package for Sidestore
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          BUILD: ${{ steps.version.outputs.BUILD }}
+        run: |
+          ZIP_NAME="$APP_NAME-v${VERSION}-b${BUILD}-unsigned.zip"
+          
+          mkdir -p Payload/$APP_NAME.app
+          cp -R PlugIns Payload/
+          cp -R Frameworks Payload/
+          cp -R *.otf Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.ttf Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.png Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.json Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.plist Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.car Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R *.bundle Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R "Launch Screen.storyboardc" Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R Metadata.appintents Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R Intents.intentdefinition Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R PkgInfo Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R PrivacyInfo.xcprivacy Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R StoreKitTest.storekit Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R cities.plist Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp -R decrypt.day Payload/$APP_NAME.app/ 2>/dev/null || true
+          cp Info.plist Payload/$APP_NAME.app/
+          
+          find Payload -name "_CodeSignature" -type d -exec rm -rf {} + 2>/dev/null || true
+          find Payload -name "SC_Info" -type d -exec rm -rf {} + 2>/dev/null || true
+          
+          python3 << PYEOF
+import zipfile
+import os
+
+zip_name = "$ZIP_NAME"
+payload_dir = 'Payload'
+
+with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zf:
+    for root, dirs, files in os.walk(payload_dir):
+        dirs[:] = [d for d in dirs if d != '.DS_Store']
+        for file in files:
+            if file == '.DS_Store':
+                continue
+            file_path = os.path.join(root, file)
+            arcname = os.path.relpath(file_path, os.path.dirname(payload_dir))
+            zf.write(file_path, arcname)
+
+print(f"Created {zip_name}")
+PYEOF
+          
+          echo "Created $ZIP_NAME"
+          ls -la $ZIP_NAME
+
+      - name: Upload IPA artifact
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          BUILD: ${{ steps.version.outputs.BUILD }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}-v${{ steps.version.outputs.VERSION }}-b${{ steps.version.outputs.BUILD }}-unsigned
+          path: |
+            ${{ env.APP_NAME }}-v${{ steps.version.outputs.VERSION }}-b${{ steps.version.outputs.BUILD }}-unsigned.zip
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload Info.plist
+        uses: actions/upload-artifact@v4
+        with:
+          name: Info-plist
+          path: |
+            Info.plist
+          retention-days: 30
+
+      - name: Summary
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          BUILD: ${{ steps.version.outputs.BUILD }}
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | $VERSION |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | $BUILD |" >> $GITHUB_STEP_SUMMARY
+          echo "| App Name | $APP_NAME |" >> $GITHUB_STEP_SUMMARY
+          echo "| Sidestore Ready | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
