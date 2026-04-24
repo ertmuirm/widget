@@ -158,6 +158,8 @@ struct HomeWidgetGrid: View {
         case .systemMedium: return 28
         case .systemLarge: return 22
         case .systemExtraLarge: return 20
+        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+            return 28
         @unknown default: return 28
         }
     }
@@ -207,6 +209,8 @@ struct LockScreenWidgetEntryView: View {
             rectangularView
         case .accessoryInline:
             inlineView
+        case .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge:
+            circularView
         @unknown default:
             circularView
         }

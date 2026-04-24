@@ -324,7 +324,7 @@ extension WidgetFamily {
         case .accessoryCircular: return .lockCircular
         case .accessoryRectangular: return .lockRectangular
         case .accessoryInline: return .lockInline
-        default: return .homeMedium
+        @unknown default: return .homeMedium
         }
     }
 }
