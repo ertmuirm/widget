@@ -16,8 +16,17 @@ jobs:
         with:
           fetch-depth: 1
       
+      - name: Debug - list files
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la
+          echo "---"
+          ls -la new/ 2>/dev/null || echo "No new/ folder"
+      
       - name: Install XcodeGen
-        run: brew install xcodegen || true
+        run: |
+          brew install xcodegen || true
+          xcodegen --version
       
       - name: Generate Xcode Project
         run: |
