@@ -30,22 +30,16 @@ jobs:
       - name: Build (unsigned)
         run: |
           cd new
-          xcodebuild archive -scheme Widget -configuration Release -archivePath ./build/Widget.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
+          xcodebuild archive -scheme IOSMirror -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
 
       - name: Package as IPA
         run: |
           cd new
-          echo "Archive contents:"
-          ls -la build/Widget.xarchive/Products/ 2>/dev/null || echo "No Products dir"
-          ls -la build/Widget.xarchive/Products/Applications/ 2>/dev/null || echo "No Applications dir"
           
           # Check what app was built
-          if [ -d "build/Widget.xarchive/Products/Applications/IOSMirror.app" ]; then
-            APP="build/Widget.xarchive/Products/Applications/IOSMirror.app"
+          if [ -d "build/IOSMirror.xarchive/Products/Applications/IOSMirror.app" ]; then
+            APP="build/IOSMirror.xarchive/Products/Applications/IOSMirror.app"
             echo "Found IOSMirror.app"
-          elif [ -d "build/Widget.xarchive/Products/Applications/Widget.app" ]; then
-            APP="build/Widget.xarchive/Products/Applications/Widget.app"
-            echo "Found Widget.app"
           else
             echo "App not found - listing all:"
             find build -type d 2>/dev/null
