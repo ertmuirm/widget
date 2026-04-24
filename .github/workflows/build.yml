@@ -12,6 +12,8 @@ on:
 permissions:
   contents: read
   actions: write
+  attestations: write
+  id-token: write
 
 env:
   APP_NAME: Widgetsmith
@@ -21,8 +23,21 @@ jobs:
     runs-on: macos-latest
     permissions:
       contents: read
+      actions: write
+      attestations: write
+      id-token: write
     
     steps:
+      - name: Debug environment
+        run: |
+          echo "=== Debug Environment ==="
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_SHA: $GITHUB_SHA"
+          echo "=== Running on $(uname -a) ==="
+          ls -la
+          pwd
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
