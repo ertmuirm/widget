@@ -17,7 +17,7 @@ struct HomeScreenWidget: SwiftUI.Widget {
     var body: some SwiftUI.WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WidgetTimelineProvider()) { entry in
             HomeWidgetEntryView(entry: entry)
-                .containerBackground(.black.ignoresSafeArea(), for: .widget)
+                .widgetBackground(Color.black)
         }
         .configurationDisplayName("Widget")
         .description("Customizable icon grid widget")
@@ -33,7 +33,7 @@ struct LockScreenWidget: SwiftUI.Widget {
     var body: some SwiftUI.WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WidgetTimelineProvider()) { entry in
             LockScreenWidgetEntryView(entry: entry)
-                .containerBackground(.black.ignoresSafeArea(), for: .widget)
+                .widgetBackground(Color.black)
         }
         .configurationDisplayName("Widget")
         .description("Customizable lock screen widget")
@@ -302,4 +302,21 @@ struct LockScreenWidgetEntryView: View {
     LockScreenWidget()
 } timeline: {
     WidgetEntry(date: Date(), widget: nil)
+}
+// MARK: - Background Modifier
+
+extension View {
+    @ViewBuilder
+    func widgetBackground<Background: View>(_ background: Background) -> some View {
+        if #available(iOS 17.0, *) {
+            containerBackground(for: .widget) { background }
+        } else {
+            background(background: background)
+        }
+    }
+    
+    @ViewBuilder
+    func background<S: ShapeStyle>(background: S) -> some View {
+        self.background(background)
+    }
 }

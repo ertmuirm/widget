@@ -1,5 +1,4 @@
 import AppIntents
-import UIKit
 
 // MARK: - Intent Handler for Widget Icons
 
@@ -17,17 +16,13 @@ struct OpenURLIntent: AppIntent {
         self.urlString = url
     }
     
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & OpensIntent {
+        // Open URL using system handler
         guard let url = URL(string: urlString) else {
             return .result()
         }
         
-        // Open URL - this uses iOS system URL handling
-        await MainActor.run {
-            UIApplication.shared.open(url)
-        }
-        
-        return .result()
+        return .result(opensIntentWith: url)
     }
 }
 
@@ -46,18 +41,13 @@ struct RunShortcutIntent: AppIntent {
         self.shortcutName = name
     }
     
-    func perform() async throws -> some IntentResult {
-        // Use shortcuts:// URL scheme to run a shortcut
+    func perform() async throws -> some IntentResult & OpensIntent {
         guard let encodedName = shortcutName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "shortcuts://run-shortcut?name=\(encodedName)") else {
             return .result()
         }
         
-        await MainActor.run {
-            UIApplication.shared.open(url)
-        }
-        
-        return .result()
+        return .result(opensIntentWith: url)
     }
 }
 
@@ -85,83 +75,32 @@ struct WidgetActionIntent: AppIntent {
         self.appBundleId = bundleId
     }
     
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & OpensIntent {
         switch actionType {
         case "urlScheme":
             return try await executeURLScheme()
         case "shortcut":
             return try await executeShortcut()
-        case "appIntent":
-            return try await executeAppIntent()
         default:
             return .result()
         }
     }
     
-    private func executeURLScheme() async throws -> some IntentResult {
+    private func executeURLScheme() async throws -> some IntentResult & OpensIntent {
         guard let url = URL(string: actionValue) else {
             return .result()
         }
         
-        await MainActor.run {
-            UIApplication.shared.open(url)
-        }
-        
-        return .result()
+        return .result(opensIntentWith: url)
     }
     
-    private func executeShortcut() async throws -> some IntentResult {
+    private func executeShortcut() async throws -> some IntentResult & OpensIntent {
         guard let encodedName = actionValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "shortcuts://run-shortcut?name=\(encodedName)") else {
             return .result()
         }
         
-        await MainActor.run {
-            UIApplication.shared.open(url)
-        }
-        
-        return .result()
-    }
-    
-    private func executeAppIntent() async throws -> some IntentResult {
-        // Handle specific app intents based on bundle ID
-        guard let bundleId = appBundleId else {
-            return try await executeURLScheme()
-        }
-        
-        // Map common app intents
-        switch bundleId {
-        case "com.apple.mobilesafari":
-            if let url = URL(string: actionValue) {
-                await MainActor.run {
-                    UIApplication.shared.open(url)
-                }
-            }
-            
-        case "com.apple.mobilephone":
-            if let url = URL(string: actionValue) {
-                await MainActor.run {
-                    UIApplication.shared.open(url)
-                }
-            }
-            
-        case "com.apple.Maps":
-            if let url = URL(string: actionValue) {
-                await MainActor.run {
-                    UIApplication.shared.open(url)
-                }
-            }
-            
-        default:
-            // Fall back to URL scheme
-            if let url = URL(string: actionValue) {
-                await MainActor.run {
-                    UIApplication.shared.open(url)
-                }
-            }
-        }
-        
-        return .result()
+        return .result(opensIntentWith: url)
     }
 }
 
