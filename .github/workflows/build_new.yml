@@ -1,0 +1,60 @@
+name: Build New Widget
+
+on:
+  push:
+    branches:
+      - new
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: new
+          fetch-depth: 1
+      
+      - name: List files in new folder
+        run: |
+          ls -la new/
+          ls -la new/App/
+          ls -la new/Widget/
+      
+      - name: Install XcodeGen
+        run: |
+          brew install xcodegen || true
+          xcodegen --version
+      
+      - name: Generate
+        run: |
+          cd new
+          xcodegen generate
+      
+      - name: Build
+        run: |
+          cd new
+          xcodebuild -project Widget.xcodeproj \
+            -scheme Widget \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER=com.zeroflash.widget \
+            build 2>&1 | tail -30
+      
+      - name: Package if successful
+        run: |
+          cd new
+          ls -la
+          ls -la build/Build/Products/Debug-iphonesimulator/ 2>/dev/null || find . -name "Widget.app" -type d 2>/dev/null | head -3
+      
+      - name: Upload
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Widget
+          path: new/build
+          retention-days: 7
