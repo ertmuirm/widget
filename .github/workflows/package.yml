@@ -10,15 +10,29 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Setup
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            Widgetsmith.app
+            Info.plist
+          sparse-checkout-cone-mode: false
+
+      - name: List files
         run: |
-          echo "Starting build..."
-          whoami
+          echo "Current directory:"
           pwd
           ls -la
+          echo ""
+          echo "Widgetsmith.app contents:"
+          ls -la Widgetsmith.app/ 2>/dev/null || echo "No Widgetsmith.app"
 
       - name: Package App
         run: |
           mkdir -p Payload/Widgetsmith.app
-          cp -R Info.plist Payload/Widgetsmith.app/
+          if [ -d "Widgetsmith.app" ]; then
+            cp -R Widgetsmith.app/* Payload/Widgetsmith.app/
+          fi
           ls -la Payload/
+          ls -la Payload/Widgetsmith.app/
