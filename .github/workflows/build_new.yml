@@ -43,7 +43,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror \
-            build 2>&1 | tail -30
+            build 2>&1
       
       - name: Package as IPA
         if: success()
