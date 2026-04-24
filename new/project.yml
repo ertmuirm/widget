@@ -1,4 +1,4 @@
-name: Widget
+name: IOSMirror
 options:
   bundleIdPrefix: com.zeroflash
   deploymentTarget:
