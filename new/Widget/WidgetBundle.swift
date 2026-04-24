@@ -2,7 +2,7 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct WidgetBundle: WidgetBundle {
+struct IOSMirrorWidgetBundle: SwiftUI.WidgetBundle {
     var body: some Widget {
         HomeScreenWidget()
         LockScreenWidget()
@@ -11,10 +11,10 @@ struct WidgetBundle: WidgetBundle {
 
 // MARK: - Home Screen Widget
 
-struct HomeScreenWidget: Widget {
+struct HomeScreenWidget: SwiftUI.Widget {
     let kind: String = "HomeScreenWidget"
     
-    var body: some WidgetConfiguration {
+    var body: some SwiftUI.WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WidgetTimelineProvider()) { entry in
             HomeWidgetEntryView(entry: entry)
                 .containerBackground(.black.ignoresSafeArea(), for: .widget)
@@ -27,10 +27,10 @@ struct HomeScreenWidget: Widget {
 
 // MARK: - Lock Screen Widget
 
-struct LockScreenWidget: Widget {
+struct LockScreenWidget: SwiftUI.Widget {
     let kind: String = "LockScreenWidget"
     
-    var body: some WidgetConfiguration {
+    var body: some SwiftUI.WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WidgetTimelineProvider()) { entry in
             LockScreenWidgetEntryView(entry: entry)
                 .containerBackground(.black.ignoresSafeArea(), for: .widget)
