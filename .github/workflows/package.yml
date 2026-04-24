@@ -1,4 +1,4 @@
-name: Build and Package
+name: Build iOS IPA
 
 on:
   workflow_dispatch:
@@ -25,22 +25,22 @@ jobs:
           echo "BUILD=$BUILD" >> $GITHUB_OUTPUT
           echo "Building IOSMirror v${VERSION} (${BUILD})"
 
-      - name: Clean previous build artifacts
+      - name: Clean previous artifacts
         run: |
           rm -rf Payload/
           rm -f *.ipa
           rm -f *.zip
 
-      - name: Remove code signatures for Sidestore
+      - name: Strip code signatures
         run: |
           rm -rf _CodeSignature
           find . -name "*.strings" -path "*/PlugIns/*" -delete 2>/dev/null || true
-          echo "Code signatures removed"
+          echo "Code signatures stripped"
 
       - name: Package as IPA structure
         run: |
           mkdir -p Payload/IOSMirror.app
-          # Copy all app contents (files are in root of repo)
+          # Copy all app contents
           for item in *; do
             case "$item" in
               .git|.github|Payload|'.trigger'|'.force_push_trigger') ;;
@@ -56,27 +56,19 @@ jobs:
           done
           chmod +x Payload/IOSMirror.app/IOSMirror 2>/dev/null || true
           ls -la Payload/
-          echo "Total files in app bundle: $(find Payload/IOSMirror.app -type f | wc -l)"
+          echo "Total files: $(find Payload/IOSMirror.app -type f | wc -l)"
 
-      - name: Read version for naming
-        run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
-          BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Info.plist)
-          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
-          echo "BUILD=${BUILD}" >> $GITHUB_OUTPUT
-          echo "Building version: ${VERSION} build ${BUILD}"
-
-      - name: Create ZIP archive
+      - name: Create unsigned IPA
         run: |
           cd Payload
-          zip -r ../IOSMirror.zip IOSMirror.app
+          zip -r ../IOSMirror.ipa IOSMirror.app
           cd ..
-          ls -la IOSMirror.zip
-          echo "ZIP size: $(du -h IOSMirror.zip | cut -f1)"
+          ls -la IOSMirror.ipa
+          echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
 
-      - name: Upload Artifact
+      - name: Upload unsigned IPA
         uses: actions/upload-artifact@v4
         with:
-          name: IOSMirror-Package
-          path: IOSMirror.zip
+          name: IOSMirror
+          path: IOSMirror.ipa
           retention-days: 30
