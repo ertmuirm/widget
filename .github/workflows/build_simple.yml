@@ -36,7 +36,7 @@ jobs:
       - name: Package as IPA
         run: |
           mkdir -p Payload
-          cp -r ./new/build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/
+          cp -r ./build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/
           chmod +x Payload/IOSMirror.app/IOSMirror
           cd Payload
           zip -r ../IOSMirror.ipa IOSMirror.app

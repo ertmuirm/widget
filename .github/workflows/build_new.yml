@@ -36,8 +36,8 @@ jobs:
       - name: Build
         run: |
           cd new
-          xcodebuild -project Widget.xcodeproj \
-            -scheme Widget \
+          xcodebuild -project IOSMirror.xcodeproj \
+            -scheme IOSMirror \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
             CODE_SIGNING_ALLOWED=NO \
@@ -45,16 +45,30 @@ jobs:
             PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror \
             build 2>&1 | tail -30
       
-      - name: Package if successful
+      - name: Package as IPA
+        if: success()
         run: |
           cd new
-          ls -la
-          ls -la build/Build/Products/Debug-iphonesimulator/ 2>/dev/null || find . -name "Widget.app" -type d 2>/dev/null | head -3
+          # Find the built app
+          APP=$(find build -name "IOSMirror.app" -type d 2>/dev/null | head -1)
+          echo "Found: $APP"
+          
+          if [ -n "$APP" ] && [ -d "$APP" ]; then
+            mkdir -p Payload
+            cp -R "$APP" Payload/
+            cd Payload
+            zip -r ../IOSMirror.ipa IOSMirror.app
+            cd ..
+            ls -la IOSMirror.ipa
+          else
+            echo "App not found"
+            find build -type d 2>/dev/null
+          fi
       
       - name: Upload
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Widget
-          path: new/build
+          name: IOSMirror
+          path: new/IOSMirror.ipa
           retention-days: 7
