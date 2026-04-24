@@ -114,3 +114,19 @@ schemes:
       config: Debug
     archive:
       config: Release
+
+  IOSMirror:
+    build:
+      targets:
+        Widget: all
+        WidgetExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

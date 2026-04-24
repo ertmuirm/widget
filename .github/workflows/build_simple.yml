@@ -1,0 +1,49 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: new
+
+      - name: Install xcodegen
+        run: |
+          which xcodegen || brew install xcodegen
+          xcodegen --version
+
+      - name: Generate Xcode Project
+        run: |
+          ls -la new/
+          cd new
+          xcodegen generate
+          ls -la
+
+      - name: Build (unsigned)
+        run: |
+          cd new
+          xcodebuild archive -scheme IOSMirror -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
+
+      - name: Package as IPA
+        run: |
+          mkdir -p Payload
+          cp -r ./new/build/IOSMirror.xarchive/Products/Applications/IOSMirror.app Payload/
+          chmod +x Payload/IOSMirror.app/IOSMirror
+          cd Payload
+          zip -r ../IOSMirror.ipa IOSMirror.app
+          cd ..
+          ls -la IOSMirror.ipa
+          echo "IPA size: $(du -h IOSMirror.ipa | cut -f1)"
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: IOSMirror
+          path: IOSMirror.ipa
+          retention-days: 30
