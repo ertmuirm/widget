@@ -30,20 +30,18 @@ jobs:
       - name: Build (unsigned)
         run: |
           cd new
-          xcodebuild archive -scheme IOSMirror -configuration Release -archivePath ./build/IOSMirror.xarchive CODE_SIGNING_ALLOWED=NO PRODUCT_BUNDLE_IDENTIFIER=com.iosmirror 2>&1 | tail -30
+          mkdir -p build
+          xcodebuild build -scheme IOSMirror -configuration Release -sdk iphoneos -derivedDataPath ./build/dd CODE_SIGNING_ALLOWED=NO 2>&1 | tail -30
 
       - name: Package as IPA
         run: |
           cd new
           
-          # Check what app was built
-          if [ -d "build/IOSMirror.xarchive/Products/Applications/IOSMirror.app" ]; then
-            APP="build/IOSMirror.xarchive/Products/Applications/IOSMirror.app"
-            echo "Found IOSMirror.app"
-          else
+          # Find the built app in derivedData
+          APP=$(find build/dd -name "IOSMirror.app" -type d 2>/dev/null | head -1)
+          if [ -z "$APP" ]; then
             echo "App not found - listing all:"
             find build -type d 2>/dev/null
-            ls -laR build/ 2>/dev/null
             exit 1
           fi
           
