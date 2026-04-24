@@ -22,7 +22,7 @@ struct OpenURLIntent: AppIntent {
             return .result()
         }
         
-        return .result(opensIntentWith: url)
+        return .result(value: url)
     }
 }
 
@@ -47,7 +47,7 @@ struct RunShortcutIntent: AppIntent {
             return .result()
         }
         
-        return .result(opensIntentWith: url)
+        return .result(value: url)
     }
 }
 
@@ -91,7 +91,7 @@ struct WidgetActionIntent: AppIntent {
             return .result()
         }
         
-        return .result(opensIntentWith: url)
+        return .result(value: url)
     }
     
     private func executeShortcut() async throws -> some IntentResult & OpensIntent {
@@ -100,7 +100,7 @@ struct WidgetActionIntent: AppIntent {
             return .result()
         }
         
-        return .result(opensIntentWith: url)
+        return .result(value: url)
     }
 }
 

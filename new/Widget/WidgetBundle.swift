@@ -309,14 +309,9 @@ extension View {
     @ViewBuilder
     func widgetBackground<Background: View>(_ background: Background) -> some View {
         if #available(iOS 17.0, *) {
-            containerBackground(for: .widget) { background }
+            self.containerBackground(for: .widget) { background }
         } else {
-            background(background: background)
+            self.background(background)
         }
-    }
-    
-    @ViewBuilder
-    func background<S: ShapeStyle>(background: S) -> some View {
-        self.background(background)
     }
 }
