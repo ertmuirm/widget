@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>25C56</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>IOSMirror</string>
+	<key>CFBundleExecutable</key>
+	<string>WidgetsExtension</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.iosmirror.broadcast</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>WidgetsExtension</string>
+	<key>CFBundlePackageType</key>
+	<string>XPC!</string>
+	<key>CFBundleShortVersionString</key>
+	<string>8.2</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>iPhoneOS</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1249</string>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>23C57</string>
+	<key>DTPlatformName</key>
+	<string>iphoneos</string>
+	<key>DTPlatformVersion</key>
+	<string>26.2</string>
+	<key>DTSDKBuild</key>
+	<string>23C57</string>
+	<key>DTSDKName</key>
+	<string>iphoneos26.2</string>
+	<key>DTXcode</key>
+	<string>2630</string>
+	<key>DTXcodeBuild</key>
+	<string>17C528</string>
+	<key>MinimumOSVersion</key>
+	<string>15.0</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Your calendar can be displayed in Calendar widgets.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Your calendar events can be shown on widgets.</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.widgetkit-extension</string>
+	</dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Your activity and health data can be shown on widgets.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Your activity and health data can be shown on widgets.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You can display your photos as widgets.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Your reminders can be shown on widgets.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Your reminders can be shown on a widget.</string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Advocate.otf</string>
+		<string>Concourse.otf</string>
+		<string>HermesMaia.otf</string>
+		<string>Triplicate.otf</string>
+		<string>Heliotrope.otf</string>
+		<string>Valkyrie.otf</string>
+		<string>CourierPrime.ttf</string>
+		<string>Spectre.otf</string>
+		<string>Urayasu.otf</string>
+		<string>molly-script.otf</string>
+		<string>tikitikifestival-regular.otf</string>
+		<string>tikitikifestival-script.otf</string>
+		<string>summerfestival-regular.otf</string>
+		<string>Womprat-Bold.otf</string>
+		<string>CaptainEdward-Rough.otf</string>
+		<string>FreeLunch-Regular.otf</string>
+		<string>Parkly-Condensed.otf</string>
+		<string>ShipsWhistle-Rough.otf</string>
+		<string>SecondHandLong.otf</string>
+	</array>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+</dict>
+</plist>

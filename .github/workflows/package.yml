@@ -23,7 +23,7 @@ jobs:
           BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Info.plist)
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "BUILD=$BUILD" >> $GITHUB_OUTPUT
-          echo "Building Widgetsmith v${VERSION} (${BUILD})"
+          echo "Building IOSMirror v${VERSION} (${BUILD})"
 
       - name: Clean previous build artifacts
         run: |
@@ -34,31 +34,29 @@ jobs:
       - name: Remove code signatures for Sidestore
         run: |
           rm -rf _CodeSignature
-          rm -rf "PlugIns/Widget Configurator.strings" 2>/dev/null || true
-          rm -rf "PlugIns/Clock.strings" 2>/dev/null || true
           find . -name "*.strings" -path "*/PlugIns/*" -delete 2>/dev/null || true
           echo "Code signatures removed"
 
       - name: Package as IPA structure
         run: |
-          mkdir -p Payload/Widgetsmith.app
+          mkdir -p Payload/IOSMirror.app
           # Copy all app contents (files are in root of repo)
           for item in *; do
             case "$item" in
               .git|.github|Payload|'.trigger'|'.force_push_trigger') ;;
-              *) cp -R "$item" Payload/Widgetsmith.app/ ;;
+              *) cp -R "$item" Payload/IOSMirror.app/ ;;
             esac
           done
           # Copy hidden files (except .git)
           for item in .[!.]*; do
             case "$item" in
               .git) ;;
-              *) cp -R "$item" Payload/Widgetsmith.app/ 2>/dev/null || true ;;
+              *) cp -R "$item" Payload/IOSMirror.app/ 2>/dev/null || true ;;
             esac
           done
-          chmod +x Payload/Widgetsmith.app/WidgetSmith 2>/dev/null || true
+          chmod +x Payload/IOSMirror.app/IOSMirror 2>/dev/null || true
           ls -la Payload/
-          echo "Total files in app bundle: $(find Payload/Widgetsmith.app -type f | wc -l)"
+          echo "Total files in app bundle: $(find Payload/IOSMirror.app -type f | wc -l)"
 
       - name: Read version for naming
         run: |
@@ -71,14 +69,14 @@ jobs:
       - name: Create ZIP archive
         run: |
           cd Payload
-          zip -r ../Widgetsmith.zip Widgetsmith.app
+          zip -r ../IOSMirror.zip IOSMirror.app
           cd ..
-          ls -la Widgetsmith.zip
-          echo "ZIP size: $(du -h Widgetsmith.zip | cut -f1)"
+          ls -la IOSMirror.zip
+          echo "ZIP size: $(du -h IOSMirror.zip | cut -f1)"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Widgetsmith-Package
-          path: Widgetsmith.zip
+          name: IOSMirror-Package
+          path: IOSMirror.zip
           retention-days: 30
