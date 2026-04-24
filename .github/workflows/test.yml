@@ -1,0 +1,19 @@
+name: Simple Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello world
+        run: |
+          echo "Hello from GitHub Actions!"
+          echo "Workflow ID: ${{ github.workflow_id }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Event: ${{ github.event_name }}"
+          uname -a
